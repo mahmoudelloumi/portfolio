@@ -478,7 +478,10 @@
           <div class="cv-group">
             <a class="btn ghost cv-open" id="cvMain" href="docs/CV_Mahmoud_Elloumi_FR.pdf" target="_blank" rel="noopener"><svg class="i"><use href="#i-doc"/></svg>CV Français</a>
             <a class="btn ghost icon" id="cvDl" href="docs/CV_Mahmoud_Elloumi_FR.pdf" download="CV_Mahmoud_Elloumi_FR.pdf" aria-label="Télécharger le CV (FR)" title="Télécharger le CV (FR)"><svg class="i"><use href="#i-down"/></svg></a>
+          </div>
+          <div class="cv-group">
             <a class="btn ghost cv-open" id="cvAlt" href="docs/CV_Mahmoud_Elloumi_EN.pdf" target="_blank" rel="noopener">EN</a>
+            <a class="btn ghost icon" id="cvAltDl" href="docs/CV_Mahmoud_Elloumi_EN.pdf" download="CV_Mahmoud_Elloumi_EN.pdf" aria-label="Télécharger le CV (EN)" title="Télécharger le CV (EN)"><svg class="i"><use href="#i-down"/></svg></a>
           </div>
         </div>
         <div class="socials">
@@ -952,7 +955,14 @@
     const v = el.getAttribute(a);
     if (v && EN[norm(v)]) attrNodes.push({ el, a, fr: v, en: EN[norm(v)] });
   }));
-  const cvMain = document.getElementById('cvMain'), cvAlt = document.getElementById('cvAlt'), cvDl = document.getElementById('cvDl');
+  const cvMain = document.getElementById('cvMain'), cvAlt = document.getElementById('cvAlt'), cvDl = document.getElementById('cvDl'), cvAltDl = document.getElementById('cvAltDl');
+  // Bouton de téléchargement : fichier et libellé selon la langue du CV et celle du site
+  const setDl = (el, cv, l) => {
+    const label = (l === 'en' ? 'Download resume (' : 'Télécharger le CV (') + cv + ')';
+    el.href = 'docs/CV_Mahmoud_Elloumi_' + cv + '.pdf';
+    el.download = 'CV_Mahmoud_Elloumi_' + cv + '.pdf';
+    el.setAttribute('aria-label', label); el.title = label;
+  };
   const cvMainFr = cvMain.innerHTML, cvAltFr = cvAlt.innerHTML;
   let lang = 'fr';
   const setLang = l => {
@@ -968,10 +978,8 @@
     cvAlt.href = 'docs/CV_Mahmoud_Elloumi_' + (l === 'en' ? 'FR' : 'EN') + '.pdf';
     cvMain.innerHTML = l === 'en' ? cvMainFr.replace('CV Français', 'Resume (EN)') : cvMainFr;
     cvAlt.innerHTML = l === 'en' ? 'FR' : cvAltFr;
-    const main = l === 'en' ? 'EN' : 'FR', dlLabel = (l === 'en' ? 'Download resume (' : 'Télécharger le CV (') + main + ')';
-    cvDl.href = 'docs/CV_Mahmoud_Elloumi_' + main + '.pdf';
-    cvDl.download = 'CV_Mahmoud_Elloumi_' + main + '.pdf';
-    cvDl.setAttribute('aria-label', dlLabel); cvDl.title = dlLabel;
+    setDl(cvDl, l === 'en' ? 'EN' : 'FR', l);
+    setDl(cvAltDl, l === 'en' ? 'FR' : 'EN', l);
     document.querySelectorAll('.lang-switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === l));
     try { localStorage.setItem('lang', l); } catch (e) {}
   };

@@ -241,22 +241,25 @@
   .card p { font-size: 15.5px; flex: 1; }
   .card:has(.feature-list) p { flex: none; }
   .card .feature-list { flex: 1; align-content: start; }
-  .card .shots { grid-template-columns: repeat(2, 1fr); margin-top: 4px; }
+  .card .shots { grid-template-columns: repeat(2, minmax(0, 215px)); margin-top: 4px; }
   .card .shots:has(> :nth-child(3)) { grid-template-columns: repeat(3, 1fr); }
   .card .shots:has(> :only-child) { grid-template-columns: 1fr; }
   .card .shots .zoomable:only-child { aspect-ratio: auto; background: #fff; }
   .card .shots .zoomable:only-child img { height: auto; object-fit: contain; }
 
   /* Projets : image de couverture (vraies captures) */
-  .card-cover { position: relative; display: block; margin: -28px -28px 6px; padding: 0; border: 0; border-bottom: 1px solid var(--line);
+  .card-cover { position: relative; display: block; width: calc(100% + 56px); margin: -28px -28px 6px; padding: 0; border: 0; border-bottom: 1px solid var(--line);
     aspect-ratio: 16 / 9; overflow: hidden; cursor: zoom-in; background: var(--bg-alt); }
-  .card-cover img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; transition: transform .45s ease; }
+  .card-cover img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform .45s ease; }
   .card:hover .card-cover img { transform: scale(1.04); }
   .card-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(2,6,23,.55)); pointer-events: none; }
   .cover-count { position: absolute; right: 12px; bottom: 12px; z-index: 1; display: inline-flex; align-items: center; gap: 6px;
     font-size: 12.5px; font-weight: 600; color: #fff; background: rgba(15,23,42,.72); backdrop-filter: blur(4px); padding: 5px 11px; border-radius: 999px; }
   .cover-count svg.i { width: 14px; height: 14px; }
   .shots[hidden] { display: none; }
+  /* Plus prioritaire que .zoomable (width: 100%) : la couverture remplit toute la carte */
+  .card .card-cover { width: calc(100% + 56px); }
+  @media (max-width: 480px) { .card .card-cover { width: calc(100% + 44px); } }
 
   .card { gap: 10px; }
   .card p { font-size: 15px; }
@@ -270,6 +273,7 @@
   .eng-media { display: grid; gap: 4px; min-height: 210px; height: 100%; background: var(--bg-alt); }
   .eng-media.n2 { grid-template-columns: 1.4fr 1fr; }
   .eng-media.n3 { grid-template-columns: 1.5fr 1fr; grid-template-rows: 1fr 1fr; }
+  .eng-media.n2v { grid-template-rows: 1fr 1fr; }
   .eng-media.n3 > :first-child { grid-row: span 2; }
   .eng-media .zoomable { position: relative; overflow: hidden; min-height: 0; background: #0b1220; }
   .eng-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .45s ease; }
@@ -380,7 +384,7 @@
   .feature.solo { grid-template-columns: 1fr; }
   .feature.solo .feature-body { padding: 32px; }
   .feature.solo .feature-list { grid-template-columns: 1fr 1fr; column-gap: 32px; }
-  .feature.solo .shots { grid-template-columns: repeat(4, 1fr); }
+  .feature.solo .shots { grid-template-columns: repeat(4, minmax(0, 215px)); }
   .feature.screen .feature-list { grid-template-columns: 1fr; }
   .feature.screen .badge-on-img { left: 22px; bottom: 22px; }
   .co-logo.sm { width: 48px; height: 48px; padding: 4px; }
@@ -514,7 +518,7 @@
     .timeline { padding-left: 28px; }
     .t-item::before { left: -28px; }
     .t-card, .card { padding: 22px; }
-    .card-cover { margin: -22px -22px 6px; }
+    .card-cover { width: calc(100% + 44px); margin: -22px -22px 6px; }
     .list li { flex-direction: column; gap: 2px; }
     .actions .btn { flex: 1 1 auto; justify-content: center; }
   }
@@ -958,8 +962,7 @@
           </ul>
           <div class="tags"><span class="tag no-ic">IoT</span><span class="tag"><img src="media/icons/espressif.svg" alt="" width="14" height="14" loading="lazy">ESP32</span><span class="tag no-ic">6LoWPAN</span><span class="tag"><img src="media/icons/mqtt.svg" alt="" width="14" height="14" loading="lazy">MQTT</span><span class="tag no-ic">AWS IoT</span><span class="tag no-ic">Edge Computing</span></div>
         </article>
-        <article class="card has-cover reveal" id="projet-transactflow">
-          <button class="card-cover zoomable" data-group="transactflow" data-src="media/transactflow-dashboard.webp" data-caption="TransactFlow — Tableau de bord en temps réel connecté à Kafka" aria-label="Tableau de bord TransactFlow"><img src="media/transactflow-dashboard.webp" alt="Tableau de bord TransactFlow" loading="lazy"><span class="cover-count"><svg class="i"><use href="#i-image"/></svg><span>2</span> <span>captures</span></span></button>
+        <article class="card reveal" id="projet-transactflow">
           <div class="card-top"><div class="ic"><svg class="i"><use href="#i-db"/></svg></div><span class="kind">Projet en binôme · Avr. 2026</span></div>
           <h3>TransactFlow — Transactions bancaires en temps réel avec Kafka</h3>
           <p>Architecture event-driven qui traite et surveille des transactions bancaires en temps réel, avec un tableau de bord web mis à jour en direct.</p>
@@ -970,13 +973,13 @@
             <li>API REST et dashboard web en Java, avec authentification</li>
           </ul>
           <div class="tags"><span class="tag"><img src="media/icons/java.svg" alt="" width="14" height="14" loading="lazy">Java</span><span class="tag"><img src="media/icons/apachekafka.svg" alt="" width="14" height="14" loading="lazy">Apache Kafka</span><span class="tag no-ic">Event-driven</span><span class="tag no-ic">Maven</span><span class="tag no-ic">REST</span></div>
-          <div class="shots" data-group="transactflow" hidden>
+          <div class="shots" data-group="transactflow">
+            <button class="zoomable" data-src="media/transactflow-dashboard.webp" data-caption="TransactFlow — Tableau de bord en temps réel connecté à Kafka"><img src="media/transactflow-dashboard-thumb.webp" alt="Tableau de bord TransactFlow" loading="lazy"></button>
             <button class="zoomable" data-src="media/transactflow-login.webp" data-caption="TransactFlow — Page de connexion"><img src="media/transactflow-login-thumb.webp" alt="Connexion TransactFlow" loading="lazy"></button>
           </div>
           <a class="card-link" href="https://github.com/mahmoudelloumi/BankingTransaction" target="_blank" rel="noopener">Voir le code sur GitHub →</a>
         </article>
-        <article class="card has-cover reveal" id="projet-ijepa">
-          <button class="card-cover zoomable" data-group="ijepa" data-src="media/ijepa-demo.webp" data-caption="I-JEPA — Application Streamlit : masquage multi-blocs" aria-label="Application de démonstration I-JEPA"><img src="media/ijepa-demo.webp" alt="Application de démonstration I-JEPA" loading="lazy"><span class="cover-count"><svg class="i"><use href="#i-image"/></svg><span>2</span> <span>captures</span></span></button>
+        <article class="card reveal" id="projet-ijepa">
           <div class="card-top"><div class="ic"><svg class="i"><use href="#i-brain"/></svg></div><span class="kind">Projet de cours ML2 · Mars 2026</span></div>
           <h3>I-JEPA from scratch — Apprentissage auto-supervisé d'images</h3>
           <p>Implémentation complète en PyTorch d'I-JEPA (Meta AI, CVPR 2023) : le modèle apprend à représenter les images sans étiquettes, en prédisant les zones masquées dans l'espace latent.</p>
@@ -987,7 +990,8 @@
             <li>Application Streamlit de démonstration : masquage, courbes d'entraînement, inférence en direct</li>
           </ul>
           <div class="tags"><span class="tag"><img src="media/icons/pytorch.svg" alt="" width="14" height="14" loading="lazy">PyTorch</span><span class="tag no-ic">Vision Transformer</span><span class="tag no-ic">Auto-supervisé</span><span class="tag no-ic">Streamlit</span></div>
-          <div class="shots" data-group="ijepa" hidden>
+          <div class="shots" data-group="ijepa">
+            <button class="zoomable" data-src="media/ijepa-demo.webp" data-caption="I-JEPA — Application Streamlit : masquage multi-blocs"><img src="media/ijepa-demo-thumb.webp" alt="Application de démonstration I-JEPA" loading="lazy"></button>
             <button class="zoomable" data-src="media/ijepa-training.webp" data-caption="I-JEPA — Courbe d'entraînement (test rapide sur données synthétiques)"><img src="media/ijepa-training-thumb.webp" alt="Courbe d'entraînement I-JEPA" loading="lazy"></button>
           </div>
           <a class="card-link" href="https://github.com/mahmoudelloumi/ML2-Projet" target="_blank" rel="noopener">Voir le code sur GitHub →</a>
@@ -1162,10 +1166,9 @@
           </div>
         </article>
         <article class="eng-card reveal">
-          <div class="eng-media n3" data-group="eng-pyfac">
+          <div class="eng-media n2v" data-group="eng-pyfac">
             <button class="zoomable" data-src="media/pyfac-x-groupe.jpg" data-caption="PYFAC X (2024) — Photo de groupe"><img src="media/pyfac-x-groupe-thumb.jpg" alt="Photo de groupe de l'événement PYFAC X" loading="lazy"></button>
             <button class="zoomable" data-src="media/pyfac-11-groupe.jpg" data-caption="PYFAC 11 (2025) — Photo de groupe"><img src="media/pyfac-11-groupe-thumb.jpg" alt="Photo de groupe de l'événement PYFAC 11" loading="lazy"></button>
-            <button class="zoomable" data-src="media/pyfac-portrait.jpg" data-caption="Pitch Yourself for a Career — PYFAC X (2024)"><img src="media/pyfac-portrait-thumb.jpg" alt="Mahmoud Elloumi à l'événement PYFAC X" loading="lazy"></button>
           </div>
           <div class="eng-body">
             <div class="eng-top"><strong>Organisateur</strong><span class="date">2024 – 2026</span></div>
